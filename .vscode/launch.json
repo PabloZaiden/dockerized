@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/dockerized.js",
             "stopOnEntry": false,
-            "args": ["--delete", "sample"],
+            "args": [],
             "cwd": "${workspaceRoot}",
             "preLaunchTask": null,
             "runtimeExecutable": null,
