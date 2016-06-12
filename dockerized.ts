@@ -52,10 +52,7 @@ export class App {
 
             let commandArgs = ['run', '--rm', '-ti', command].concat(args.slice(1));
             
-            let dockerProcess = Process.spawn('docker', commandArgs, {stdio: 'inherit'});
-            //dockerProcess.stdout.pipe(process.stdout);
-            //dockerProcess.stderr.pipe(process.stderr);
-            
+            let dockerProcess = Process.spawn('docker', commandArgs, {stdio: 'inherit'});  
         } else {
             App.printAllEntries();
             App.printHelp();
