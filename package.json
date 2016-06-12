@@ -1,0 +1,22 @@
+{
+  "name": "dockerized",
+  "version": "0.1.0",
+  "description": "Easily run dockerized apps",
+  "bin": "./dockerized.js",
+  "files": ["dockerized.js"],
+  "main": "dockerized.js",
+  "dependencies": {
+    "nconf": "^0.8.4",
+    "node": "^0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pablozaiden/dockerized.git"
+  },
+  "preferGlobal":  true,
+  "bugs":{ 
+    "url" : "https://github.com/pablozaiden/dockerized/issues"
+  },
+  "author": "Pablo Zaidenvoren",
+  "license": "ISC"
+}
