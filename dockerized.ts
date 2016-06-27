@@ -5,6 +5,7 @@ import * as Fs from 'fs';
 import * as OS from 'os';
 import * as Path from 'path';
 import * as Process from 'child_process';
+import * as Commander from 'commander';
 
 
 export class App {
@@ -24,9 +25,15 @@ export class App {
     static main(args: string[]) {
         App.loadUserData();
 
-        let add = App.config.get('add');
-        let command = App.config.get('command');
-        let del = App.config.get('delete');
+        Commander
+            .option('-a, --add <name>', 'Add a new entry with the specified <name>')
+            .option('-c, --cmd <command>', 'Specify the <command> to execute')
+            .option('-d, --delete <command>', 'delete the <command>')
+            .parse(process.argv);
+
+        let add = Commander["add"];
+        let command = Commander["cmd"];
+        let del = Commander["delete"];
 
         if (App.isInput(add)) {
             if (App.isInput(command)) {
@@ -50,13 +57,14 @@ export class App {
                 return;
             }
 
-            let commandArgs = ['run', '--rm', '-ti', command].concat(args.slice(1));
+            let commandArgs = ['run', '--rm', '-ti'].concat(command.split(' ')).concat(args.slice(1));
             
             let dockerProcess = Process.spawn('docker', commandArgs, {stdio: 'inherit'});  
         } else {
             App.printAllEntries();
             App.printHelp();
         }
+        
     }
 
     private static deleteEntry(name: string): void {
@@ -84,7 +92,7 @@ export class App {
     }
 
     private static isInput(data: any) {
-        return data != undefined && data != true;
+        return data != undefined;// && data != true;
     }
 
     private static printAllEntries(): void {
@@ -99,7 +107,7 @@ export class App {
     private static printHelp(): void {
         console.log('usage:');
         console.log('   dockerized <name>');
-        console.log('   dockerized --add <name> --command <command>');
+        console.log('   dockerized --add <name> --cmd <command>');
         console.log('   dockerized --delete <name>');
     }
 

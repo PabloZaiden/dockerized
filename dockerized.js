@@ -5,12 +5,18 @@ const Fs = require('fs');
 const OS = require('os');
 const Path = require('path');
 const Process = require('child_process');
+const Commander = require('commander');
 class App {
     static main(args) {
         App.loadUserData();
-        let add = App.config.get('add');
-        let command = App.config.get('command');
-        let del = App.config.get('delete');
+        Commander
+            .option('-a, --add <name>', 'Add a new entry with the specified <name>')
+            .option('-c, --cmd <command>', 'Specify the <command> to execute')
+            .option('-d, --delete <command>', 'delete the <command>')
+            .parse(process.argv);
+        let add = Commander["add"];
+        let command = Commander["cmd"];
+        let del = Commander["delete"];
         if (App.isInput(add)) {
             if (App.isInput(command)) {
                 App.addEntry(add, command);
@@ -33,7 +39,7 @@ class App {
                 console.error(`Command ${name} does not exist`);
                 return;
             }
-            let commandArgs = ['run', '--rm', '-ti', command].concat(args.slice(1));
+            let commandArgs = ['run', '--rm', '-ti'].concat(command.split(' ')).concat(args.slice(1));
             let dockerProcess = Process.spawn('docker', commandArgs, { stdio: 'inherit' });
         }
         else {
@@ -62,7 +68,7 @@ class App {
         return undefined;
     }
     static isInput(data) {
-        return data != undefined && data != true;
+        return data != undefined; // && data != true;
     }
     static printAllEntries() {
         console.log('Available entries: ');
@@ -74,7 +80,7 @@ class App {
     static printHelp() {
         console.log('usage:');
         console.log('   dockerized <name>');
-        console.log('   dockerized --add <name> --command <command>');
+        console.log('   dockerized --add <name> --cmd <command>');
         console.log('   dockerized --delete <name>');
     }
     static loadUserData() {
